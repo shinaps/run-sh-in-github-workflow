@@ -1,0 +1,19 @@
+name: Update Line Webhook URL
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL'
+        required: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Webhook URL
+        run: |
+          curl -X PUT \
+          -H 'Authorization: Bearer ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}' \
+          -H 'Content-Type:application/json' \
+          -d '{"endpoint":"${{ github.event.inputs.url }}"}' \
+          https://api.line.me/v2/bot/channel/webhook/endpoint
