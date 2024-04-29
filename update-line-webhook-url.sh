@@ -1,16 +1,13 @@
 #!/bin/bash
 
-# .env ファイルから環境変数を読み込む
-if [ -f .env ]; then
-    export $(grep 'LINE_CHANNEL_ACCESS_TOKEN' .env | sed 's/#.*//g' | xargs)
-fi
-
 # ユーザーにエンドポイントURLの入力を促す
 echo "Enter the webhook endpoint URL:"
 read endpoint
 
-curl -X PUT \
--H "Authorization: Bearer $LINE_CHANNEL_ACCESS_TOKEN" \
--H "Content-Type:application/json" \
--d "{\"endpoint\":\"$endpoint\"}" \
-https://api.line.me/v2/bot/channel/webhook/endpoint
+gh workflow run update-line-webhook-url.yml -F url="$endpoint"
+
+# ワークフローの実行結果を確認するためにブラウザを開く
+SLEEP_SEC=5
+echo "$SLEEP_SEC"秒後にブラウザでGitHub Actionsのページを開きます
+sleep $SLEEP_SEC
+open https://github.com/shinaps/run-sh-in-github-workflow/actions
